@@ -1,2 +1,4 @@
-# Algorithm
-This is an auto push repository for Baekjoon Online Judge created with [BaekjoonHub](https://github.com/BaekjoonHub/BaekjoonHub).
+# ✨ Algorithm Study Log
+From February 2, 2025, I'm committing to consistently improving my algorithm skills! 🚀
+
+[![Solved.ac Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=lyn010913)](https://solved.ac/lyn010913/)
