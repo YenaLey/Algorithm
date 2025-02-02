@@ -1,4 +1,10 @@
-# ✨ Algorithm Study Log
-From February 2, 2025, I'm committing to consistently improving my algorithm skills! 🚀
+## 🌱 Baekjoon Contribution Graph
 
-[![Solved.ac Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=lyn010913)](https://solved.ac/lyn010913/)
+![Baekjoon Grass](https://mazassumnida.wtf/api/v2/generate_badge?boj=lyn010913)
+
+## 🏆 Tier Change Log
+
+| Date | Tier |
+|------|------|
+| 2025-02-02 | Bronze I |
+
