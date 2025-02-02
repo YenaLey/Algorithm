@@ -22,7 +22,7 @@ jobs:
           python-version: "3.x"
 
       - name: Install Dependencies
-        run: pip install requests
+        run: pip install requests beautifulsoup4
 
       - name: Run Python Script
         run: python update_readme.py
@@ -33,5 +33,5 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md tier_log.txt
+          git add README.md tier_log.txt baekjoon_grass.svg
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update Baekjoon Graph & Tier Log" && git push origin main)
