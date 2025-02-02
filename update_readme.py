@@ -1,13 +1,16 @@
 import requests
 import datetime
 import os
+from bs4 import BeautifulSoup
 
 USERNAME = "lyn010913"  # 백준 ID
 README_PATH = "README.md"
 TIER_LOG_PATH = "tier_log.txt"  # 티어 변경 로그 저장 파일
-GRASS_IMAGE_URL = f"https://mazassumnida.wtf/api/v2/generate_badge?boj={USERNAME}"
+GRASS_IMAGE_PATH = "baekjoon_grass.svg"  # 백준 잔디 그래프 저장 파일
+SOLVED_AC_BADGE = f"https://mazassumnida.wtf/api/v2/generate_badge?boj={USERNAME}"  # Solved.ac 티어 뱃지
+BAEKJOON_PROFILE_URL = f"https://www.acmicpc.net/user/{USERNAME}"  # 백준 프로필 URL
 
-# 백준 solved.ac API 요청
+# 백준 solved.ac API 요청 (현재 티어 가져오기)
 def get_baekjoon_tier(username):
     url = f"https://solved.ac/api/v3/user/show?handle={username}"
     response = requests.get(url)
@@ -27,6 +30,24 @@ def convert_tier(tier_num):
         "Ruby V", "Ruby IV", "Ruby III", "Ruby II", "Ruby I"
     ]
     return tiers[tier_num] if 0 <= tier_num < len(tiers) else "Unknown"
+
+# 백준 잔디 그래프 크롤링 & 저장
+def fetch_baekjoon_grass():
+    response = requests.get(BAEKJOON_PROFILE_URL)
+    
+    if response.status_code != 200:
+        print("백준 프로필 페이지를 가져오는 데 실패했습니다.")
+        return
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    svg_element = soup.find("svg", class_="js-calendar-graph-svg")  # 백준 잔디 그래프를 포함하는 SVG 태그 찾기
+    
+    if not svg_element:
+        print("백준 잔디 그래프를 찾을 수 없습니다.")
+        return
+
+    with open(GRASS_IMAGE_PATH, "w", encoding="utf-8") as file:
+        file.write(str(svg_element))
 
 # README 업데이트
 def update_readme():
@@ -63,9 +84,11 @@ def update_readme():
 
     # README 업데이트
     new_readme = (
+        "## 🏆 Baekjoon Tier Badge\n\n"
+        f"![Baekjoon Tier]({SOLVED_AC_BADGE})\n\n"
         "## 🌱 Baekjoon Contribution Graph\n\n"
-        f"![Baekjoon Grass]({GRASS_IMAGE_URL})\n\n"
-        "## 🏆 Tier Change Log\n\n"
+        f"<img src=\"./{GRASS_IMAGE_PATH}\" alt=\"Baekjoon Grass\" />\n\n"
+        "## 📜 Tier Change Log\n\n"
         "| Date | Tier |\n"
         "|------|------|\n"
         + "".join(tier_log_data) + "\n"
@@ -76,4 +99,5 @@ def update_readme():
         file.write(new_readme)
 
 if __name__ == "__main__":
-    update_readme()
+    fetch_baekjoon_grass()  # 백준 잔디 크롤링
+    update_readme()  # README 업데이트
