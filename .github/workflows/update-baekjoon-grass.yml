@@ -22,7 +22,10 @@ jobs:
           python-version: "3.x"
 
       - name: Install Dependencies
-        run: pip install requests beautifulsoup4 # ✅ bs4 함께 설치
+        run: pip install -r requirements.txt # ✅ requirements.txt 기반 패키지 설치
+
+      - name: Start Uvicorn Server
+        run: uvicorn main:app --reload & sleep 5 && kill $!
 
       - name: Run Python Script
         run: python update_readme.py
@@ -35,7 +38,6 @@ jobs:
           # 파일이 존재하는 경우에만 git add 실행
           [ -f README.md ] && git add README.md
           [ -f tier_log.txt ] && git add tier_log.txt
-          [ -f baekjoon_grass.svg ] && git add baekjoon_grass.svg
 
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update Baekjoon Graph & Tier Log" && git push origin main)
         env:
