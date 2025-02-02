@@ -22,21 +22,21 @@ jobs:
           python-version: "3.x"
 
       - name: Install Dependencies
-        run: pip install requests beautifulsoup4
+        run: pip install requests beautifulsoup4 # ✅ bs4 함께 설치
 
       - name: Run Python Script
         run: python update_readme.py
 
       - name: Commit and Push if Changed
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 파일이 존재하는 경우에만 git add 실행
+          [ -f README.md ] && git add README.md
+          [ -f tier_log.txt ] && git add tier_log.txt
+          [ -f baekjoon_grass.svg ] && git add baekjoon_grass.svg
+
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update Baekjoon Graph & Tier Log" && git push origin main)
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub 인증 정보 설정
-          run: |
-            git config --global user.name "github-actions[bot]"
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-            # 파일이 존재하는 경우에만 git add 실행
-            [ -f README.md ] && git add README.md
-            [ -f tier_log.txt ] && git add tier_log.txt
-            [ -f baekjoon_grass.svg ] && git add baekjoon_grass.svg
-
-            git diff --quiet && git diff --staged --quiet || (git commit -m "Update Baekjoon Graph & Tier Log" && git push origin main)
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # ✅ `env:`는 `run:` 내부에서 선언해야 함
